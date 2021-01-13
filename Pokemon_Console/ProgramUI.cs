@@ -208,11 +208,13 @@ namespace Pokemon_Console
 
 
                 Console.WriteLine("\n\nEnter position number of pokemon you wish to update");
-                int response = int.Parse();
+                string inputAsString = Console.ReadLine();
+                int response = int.Parse(inputAsString);
+
                 UpdateAPokemon(response);
             }
         }
-        private void UpdateAPokemon()
+        private void UpdateAPokemon(int teamPosition)
         {
             Pokemon pokemon = _Repo.GetPokemonByTeamPosition(teamPosition);
             Console.Clear();
@@ -296,38 +298,38 @@ namespace Pokemon_Console
                 Console.ReadKey();
             }
             Console.Clear();
-
-            void RemoveAPokemon()
+        }
+        void RemoveAPokemon()
+        {
+            List<Pokemon> pokemonTeam = _Repo.GetPokemonTeam();
+            if (pokemonTeam.Count == 0)
             {
-                List<Pokemon> pokemonTeam = _Repo.GetPokemonTeam();
-                if (pokemonTeam.Count == 0)
+                Console.WriteLine("Your Team is empty!");
+                Console.ReadKey();
+                Console.Clear();
+            }
+            else
+            {
+                Console.WriteLine("My Team:");
+                for (int i = 0; i < pokemonTeam.Count; i++)
                 {
-                    Console.WriteLine("Your Team is empty!");
-                    Console.ReadKey();
-                    Console.Clear();
+                    Console.WriteLine($"\n{i + 1}" +
+                        $"\n{pokemonTeam[i].PokemonNickName} ({pokemonTeam[i].PokemonSpeciesName})" +
+                        $"\nLevel: {pokemonTeam[i].Level}" +
+                        $"\nTypes: {pokemonTeam[i].PokemonType} - {pokemonTeam[i].SecondaryType}" +
+                        $"\nMove One: {pokemonTeam[i].MoveOne} - Move Two: {pokemonTeam[i].MoveTwo}" +
+                        $"\nMove Three: {pokemonTeam[i].MoveThree} - Move Four: {pokemonTeam[i].MoveFour}");
                 }
-                else
-                {
-                    Console.WriteLine("My Team:");
-                    for (int i = 0; i < pokemonTeam.Count; i++)
-                    {
-                        Console.WriteLine($"\n{i + 1}" +
-                            $"\n{pokemonTeam[i].PokemonNickName} ({pokemonTeam[i].PokemonSpeciesName})" +
-                            $"\nLevel: {pokemonTeam[i].Level}" +
-                            $"\nTypes: {pokemonTeam[i].PokemonType} - {pokemonTeam[i].SecondaryType}" +
-                            $"\nMove One: {pokemonTeam[i].MoveOne} - Move Two: {pokemonTeam[i].MoveTwo}" +
-                            $"\nMove Three: {pokemonTeam[i].MoveThree} - Move Four: {pokemonTeam[i].MoveFour}");
-                    }
-                    Console.WriteLine("\n\nEnter position number of pokemon you wish to remove");
-                    int response = int.Parse(Console.ReadLine());
-                    _Repo.RemovePokemonFromTeam(response);
-                    Console.Clear();
-                    Console.WriteLine("Pokemon removed from Team" +
-                        "\n\nPress any key to return to menu...");
-                    Console.ReadKey();
-                    Console.Clear();
-                }
+                Console.WriteLine("\n\nEnter position number of pokemon you wish to remove");
+                int response = int.Parse(Console.ReadLine());
+                _Repo.RemovePokemonFromTeam(response);
+                Console.Clear();
+                Console.WriteLine("Pokemon removed from Team" +
+                    "\n\nPress any key to return to menu...");
+                Console.ReadKey();
+                Console.Clear();
             }
         }
+
     }
 }
